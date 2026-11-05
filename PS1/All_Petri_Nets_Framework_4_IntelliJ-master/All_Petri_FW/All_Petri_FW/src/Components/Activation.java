@@ -900,6 +900,9 @@ public class Activation implements Serializable {
 			}
 
 		}
+		if (result != null && result.Value != null) {
+			result.Value.GenerateFuzzyToken(result.Value.Value);
+		}
 		result.SetName(OutputPlaceName);
 		Parent.Parent.PlaceList.set(outputIndex, result);
 	}
@@ -937,6 +940,9 @@ public class Activation implements Serializable {
 			}
 
 		}
+		if (result != null && result.Value != null) {
+			result.Value.GenerateFuzzyToken(result.Value.Value);
+		}
 		result.SetName(OutputPlaceName);
 		Parent.Parent.PlaceList.set(outputIndex, result);
 	}
@@ -972,6 +978,9 @@ public class Activation implements Serializable {
 			}
 
 		}
+		if (result != null && result.Value != null) {
+			result.Value.GenerateFuzzyToken(result.Value.Value);
+		}
 		result.SetName(OutputPlaceName);
 		Parent.Parent.PlaceList.set(outputIndex, result);
 	}
@@ -1006,6 +1015,9 @@ public class Activation implements Serializable {
 				this.Parent.Parent.LogThis(cuurentObj.toString());
 			}
 
+		}
+		if (result != null && result.Value != null) {
+			result.Value.GenerateFuzzyToken(result.Value.Value);
 		}
 		result.SetName(OutputPlaceName);
 		Parent.Parent.PlaceList.set(outputIndex, result);

@@ -36,4 +36,28 @@ public class Fuzzy implements Cloneable, Serializable {
 		Vector.GenerateFuzzyToken(v);
 		Value = v;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (obj instanceof Fuzzy) {
+			Fuzzy other = (Fuzzy) obj;
+			if (this.Value == null && other.Value == null)
+				return true;
+			if (this.Value != null && other.Value != null) {
+				return Math.abs(this.Value - other.Value) < 0.0001f;
+			}
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return Value != null ? Value.hashCode() : 0;
+	}
+
+
 }
