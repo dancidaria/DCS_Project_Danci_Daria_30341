@@ -1,11 +1,9 @@
 package UVS_Fuzzy;
 
-import Components.Condition;
 import Components.PetriNet;
 import Components.PetriTransition;
 import DataObjects.DataFuzzy;
 import DataOnly.Fuzzy;
-import Enumerations.TransitionCondition;
 import Interfaces.PetriObject;
 import Utilities.Functions;
 

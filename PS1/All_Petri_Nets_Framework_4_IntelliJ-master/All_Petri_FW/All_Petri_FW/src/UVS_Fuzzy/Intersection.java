@@ -1,23 +1,15 @@
 package UVS_Fuzzy;
 
-import java.util.ArrayList;
-import Components.Activation;
-import Components.Condition;
-import Components.GuardMapping;
-import Components.PetriNet;
-import Components.PetriNetWindow;
-import Components.PetriTransition;
+import Components.*;
 import DataObjects.DataFuzzy;
 import DataObjects.DataTransfer;
-import DataOnly.FLRS;
-import DataOnly.FV;
-import DataOnly.Fuzzy;
-import DataOnly.PlaceNameWithWeight;
-import DataOnly.TransferOperation;
+import DataOnly.*;
 import Enumerations.FZ;
 import Enumerations.LogicConnector;
 import Enumerations.TransitionCondition;
 import Enumerations.TransitionOperation;
+
+import java.util.ArrayList;
 
 public class Intersection {
 

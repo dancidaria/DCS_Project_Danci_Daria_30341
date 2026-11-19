@@ -14,6 +14,8 @@ public class RunAllUVS {
 		PetriNet lane3Net = Lane3.createPetriNet();
 		PetriNet lane4Net = Lane4.createPetriNet();
 		PetriNet controllerNet = Controller.createPetriNet();
+		PetriNet roundaboutNet = Roundabout.createPetriNet();
+		PetriNet alleyStNet = STAlley.createPetriNet();
 
 		PetriNetWindow frameIntersection = new PetriNetWindow(false);
 		frameIntersection.petriNet = intersectionNet;
@@ -50,6 +52,18 @@ public class RunAllUVS {
 		frameController.setTitle("Controller - Port 1085");
 		frameController.setLocation(1350, 50);
 		frameController.setVisible(true);
+
+		PetriNetWindow frameRoundabout = new PetriNetWindow(false);
+		frameRoundabout.petriNet = roundaboutNet;
+		frameRoundabout.setTitle("Roundabout - Port 1086");
+		frameRoundabout.setLocation(50, 800);
+		frameRoundabout.setVisible(true);
+
+		PetriNetWindow frameAlleyST = new PetriNetWindow(false);
+		frameAlleyST.petriNet = alleyStNet;
+		frameAlleyST.setTitle("Alley ST - Port 1087");
+		frameAlleyST.setLocation(700, 800);
+		frameAlleyST.setVisible(true);
 
 		System.out.println("All UVS Fuzzy windows opened.");
 	}

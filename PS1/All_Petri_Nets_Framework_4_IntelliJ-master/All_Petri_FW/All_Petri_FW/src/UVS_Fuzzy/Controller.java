@@ -1,11 +1,6 @@
 package UVS_Fuzzy;
 
-import Components.Activation;
-import Components.Condition;
-import Components.GuardMapping;
-import Components.PetriNet;
-import Components.PetriNetWindow;
-import Components.PetriTransition;
+import Components.*;
 import DataObjects.DataFuzzy;
 import DataObjects.DataString;
 import DataObjects.DataTransfer;

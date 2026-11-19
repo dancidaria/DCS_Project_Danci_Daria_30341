@@ -1,23 +1,15 @@
 package UVS_Fuzzy;
 
-import java.util.ArrayList;
-import Components.Activation;
-import Components.Condition;
-import Components.GuardMapping;
-import Components.PetriNet;
-import Components.PetriNetWindow;
-import Components.PetriTransition;
+import Components.*;
 import DataObjects.DataFuzzy;
 import DataObjects.DataTransfer;
-import DataOnly.FLRS;
-import DataOnly.FV;
-import DataOnly.Fuzzy;
-import DataOnly.PlaceNameWithWeight;
-import DataOnly.TransferOperation;
+import DataOnly.*;
 import Enumerations.FZ;
 import Enumerations.LogicConnector;
 import Enumerations.TransitionCondition;
 import Enumerations.TransitionOperation;
+
+import java.util.ArrayList;
 
 public class Lane2 {
 
@@ -38,6 +30,17 @@ public class Lane2 {
 		);
 
 		// --------------------------------------------------------------------
+		// ----------------------- FLRS Plus (2x1) ----------------------------
+		// --------------------------------------------------------------------
+		FLRS flrsPlus = new FLRS(
+				new FV(FZ.NL), new FV(FZ.NL), new FV(FZ.NL), new FV(FZ.NM), new FV(FZ.ZR),
+				new FV(FZ.NL), new FV(FZ.NL), new FV(FZ.NM), new FV(FZ.ZR), new FV(FZ.PM),
+				new FV(FZ.NL), new FV(FZ.NM), new FV(FZ.ZR), new FV(FZ.PM), new FV(FZ.PL),
+				new FV(FZ.NM), new FV(FZ.ZR), new FV(FZ.PM), new FV(FZ.PL), new FV(FZ.PL),
+				new FV(FZ.ZR), new FV(FZ.PM), new FV(FZ.PL), new FV(FZ.PL), new FV(FZ.PL)
+		);
+
+		// --------------------------------------------------------------------
 		// ----------------------- Constant Places ----------------------------
 		// --------------------------------------------------------------------
 		DataFuzzy green = new DataFuzzy();
@@ -49,10 +52,15 @@ public class Lane2 {
 		// --------------------------------------------------------------------
 		// -------------------- A: Entrance Lane Model ------------------------
 		// --------------------------------------------------------------------
-		DataFuzzy pIn = new DataFuzzy();
-		pIn.SetName("P_in");
-		pIn.SetValue(new Fuzzy(0.3F));
-		pn.PlaceList.add(pIn);
+		// P_R receives flow from Roundabout (P_out3)
+		DataFuzzy pR = new DataFuzzy();
+		pR.SetName("P_R");
+		pn.PlaceList.add(pR);
+
+		// P_st receives flow from Alley ST (P_out)
+		DataFuzzy pSt = new DataFuzzy();
+		pSt.SetName("P_st");
+		pn.PlaceList.add(pSt);
 
 		DataFuzzy lane1 = new DataFuzzy();
 		lane1.SetName("lane1");
@@ -76,17 +84,22 @@ public class Lane2 {
 		// t_1: P_in -> lane1
 		PetriTransition t1 = new PetriTransition(pn);
 		t1.TransitionName = "t_1";
-		t1.InputPlaceName.add("P_in");
+		t1.InputPlaceName.add("P_R");
+		t1.InputPlaceName.add("P_st");
 
-		Condition t1Ct1 = new Condition(t1, "P_in", TransitionCondition.NotNull);
+		Condition t1Ct1 = new Condition(t1, "P_R", TransitionCondition.NotNull);
+		Condition t1Ct2 = new Condition(t1, "P_st", TransitionCondition.NotNull);
+		t1Ct1.SetNextCondition(LogicConnector.AND, t1Ct2);
+
 		GuardMapping grdT1 = new GuardMapping();
 		grdT1.condition = t1Ct1;
 
 		ArrayList<PlaceNameWithWeight> inputT1 = new ArrayList<>();
-		inputT1.add(new PlaceNameWithWeight("P_in", 1.0F));
+		inputT1.add(new PlaceNameWithWeight("P_R", 1.0F));
+		inputT1.add(new PlaceNameWithWeight("P_st", 1.0F));
 		ArrayList<String> outputT1 = new ArrayList<>();
 		outputT1.add("lane1");
-		grdT1.Activations.add(new Activation(t1, flrsMove, inputT1, TransitionOperation.FLRS, outputT1));
+		grdT1.Activations.add(new Activation(t1, flrsPlus, inputT1, TransitionOperation.FLRS, outputT1));
 		t1.GuardMappingList.add(grdT1);
 		t1.Delay = 0;
 		pn.Transitions.add(t1);
@@ -134,8 +147,9 @@ public class Lane2 {
 		pE.SetName("P_e");
 		pn.PlaceList.add(pE);
 
-		DataFuzzy pExit = new DataFuzzy();
+		DataTransfer pExit = new DataTransfer();
 		pExit.SetName("P_Exit");
+		pExit.Value=new TransferOperation("localhost", "1086", "P_i1");
 		pn.PlaceList.add(pExit);
 
 		// Transition t_e1: P_e -> P_Exit
@@ -146,6 +160,7 @@ public class Lane2 {
 		Condition tE1Ct1 = new Condition(tE1, "P_e", TransitionCondition.NotNull);
 		GuardMapping grdTE1 = new GuardMapping();
 		grdTE1.condition = tE1Ct1;
+		grdTE1.Activations.add(new Activation(tE1, "P_e", TransitionOperation.SendOverNetwork, "P_Exit"));
 
 		ArrayList<PlaceNameWithWeight> inputTE1 = new ArrayList<>();
 		inputTE1.add(new PlaceNameWithWeight("P_e", 1.0F));
